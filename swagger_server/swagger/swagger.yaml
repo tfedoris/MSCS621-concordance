@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: MSCS721 Concordance
+  description: A simple concordance API.
+  contact:
+    email: michael.gildein1@marist.edu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/mscs721/concordance/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: analysis
+  description: Operations available for text analysis
+paths:
+  /analyze:
+    post:
+      tags:
+      - analysis
+      summary: Calculate
+      description: Post text to generate concordance
+      operationId: get_concordance
+      requestBody:
+        description: Text to be analyzed
+        content:
+          text/plain:
+            schema:
+              type: string
+            example: The brown fox jumped over the brown log.
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result'
+        "400":
+          description: invalid input, object invalid
+      x-openapi-router-controller: swagger_server.controllers.analysis_controller
+components:
+  schemas:
+    result:
+      required:
+      - concordance
+      - input
+      type: object
+      properties:
+        concordance:
+          type: array
+          example:
+          - token: brown
+            count: 2
+          - token: fox
+            count: 1
+          - token: jumped
+            count: 1
+          - token: log
+            count: 1
+          - token: over
+            count: 1
+          - token: the
+            count: 1
+          items:
+            $ref: '#/components/schemas/result_concordance'
+        input:
+          type: string
+          example: The brown fox jumped over the brown log.
+      example:
+        input: The brown fox jumped over the brown log.
+        concordance:
+        - token: brown
+          count: 2
+        - token: fox
+          count: 1
+        - token: jumped
+          count: 1
+        - token: log
+          count: 1
+        - token: over
+          count: 1
+        - token: the
+          count: 1
+    result_concordance:
+      type: object
+      properties:
+        token:
+          type: string
+        count:
+          type: integer
+
