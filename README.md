@@ -21,7 +21,7 @@ python3 -m swagger_server
 and open your browser to here:
 
 ```
-http://localhost:8080/mscs721/concordance/1.0.0/ui/
+http://localhost:8080/mscs721/concordance/2.0.0/ui/
 ```
 
 Your Swagger definition lives here:
