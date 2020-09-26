@@ -1,15 +1,15 @@
 openapi: 3.0.0
 info:
-  title: MSCS721 Concordance
+  title: MSCS621 Concordance
   description: A simple concordance API.
   contact:
-    email: michael.gildein1@marist.edu
+    email: tyler.fedoris1@marist.edu
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 2.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/mscs721/concordance/2.0.0
+- url: https://virtserver.swaggerhub.com/mscs621/tfedoris/concordance/2.0.0
   description: SwaggerHub API Auto Mocking
 tags:
 - name: analysis

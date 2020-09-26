@@ -20,7 +20,7 @@ class TestAnalysisController(BaseTestCase):
         """
         body = '\"The brown fox jumped over the brown log.\"'
         response = self.client.open(
-            '/mscs721/concordance/1.0.0/analyze',
+            '/mscs621/tfedoris/concordance/2.0.0/analyze',
             method='POST',
             data=json.dumps(body),
             content_type='text/plain')
@@ -34,7 +34,7 @@ class TestAnalysisController(BaseTestCase):
         """
         body = '\"The brown fox jumped over the brown log.\"'
         response = self.client.open(
-            '/mscs721/concordance/1.0.0/analyze_location',
+            '/mscs621/tfedoris/concordance/2.0.0/analyze_location',
             method='POST',
             data=json.dumps(body),
             content_type='text/plain')
