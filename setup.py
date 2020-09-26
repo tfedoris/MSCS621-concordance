@@ -17,10 +17,10 @@ REQUIRES = ["connexion"]
 setup(
     name=NAME,
     version=VERSION,
-    description="MSCS721 Concordance",
-    author_email="michael.gildein1@marist.edu",
+    description="MSCS621 Concordance",
+    author_email="tyler.fedoris1@marist.edu",
     url="",
-    keywords=["Swagger", "MSCS721 Concordance"],
+    keywords=["Swagger", "MSCS621 Concordance"],
     install_requires=REQUIRES,
     packages=find_packages(),
     package_data={'': ['swagger/swagger.yaml']},
