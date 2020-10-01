@@ -22,29 +22,37 @@ def get_concordance(body=None):  # noqa: E501
 
     :rtype: Result
     """
-    if connexion.request.is_json:
-        body = str.from_dict(connexion.request.get_json())  # noqa: E501
+    code = 200
+    
+    try:
+        if connexion.request.is_json:
+            body = str.from_dict(connexion.request.get_json())  # noqa: E501
         
-    #initialize regular expression that excludes all punctuation and
-    #other special characters except for apostrophes and hyphens
-    regex = "[^a-zA-Z'\- ]+"
+        #initialize regular expression that excludes all punctuation and
+        #other special characters except for apostrophes and hyphens
+        regex = "[^a-zA-Z'\- ]+"
+        
+        input = body.decode('utf-8')
+        concordance = []
+        
+        #parse only alpha characters using the initialized regular expression
+        input_split = re.sub(regex, '', input.lower())
+        input_split = input_split.split()
+        
+        used_words = []
+        for word in input_split:
+            if (used_words.count(word) == 0):
+                concordance.append(ResultConcordance(word, input_split.count(word)))
+                used_words.append(word)
+        
+        concordance.sort(key=operator.attrgetter('token'))
+        
+    except Exception as error:
+        concordance = []
+        code = 400
+        
     
-    input = body.decode('utf-8')
-    concordance = []
-    
-    #parse only alpha characters using the initialized regular expression
-    input_split = re.sub(regex, '', input.lower())
-    input_split = input_split.split()
-    
-    used_words = []
-    for word in input_split:
-        if (used_words.count(word) == 0):
-            concordance.append(ResultConcordance(word, input_split.count(word)))
-            used_words.append(word)
-    
-    concordance.sort(key=operator.attrgetter('token'))
-    
-    return Result(concordance, input)
+    return Result(concordance, input), code
 
 
 def get_concordance_with_location(body=None):  # noqa: E501
@@ -57,27 +65,34 @@ def get_concordance_with_location(body=None):  # noqa: E501
 
     :rtype: LocationResult
     """
-    if connexion.request.is_json:
-        body = str.from_dict(connexion.request.get_json())  # noqa: E501
+    code = 200
+    
+    try:
+        if connexion.request.is_json:
+            body = str.from_dict(connexion.request.get_json())  # noqa: E501
+            
+        #initialize regular expression that excludes all punctuation and
+        #other special characters except for apostrophes and hyphens
+        regex = "[^a-zA-Z'\- ]+"
         
-    #initialize regular expression that excludes all punctuation and
-    #other special characters except for apostrophes and hyphens
-    regex = "[^a-zA-Z'\- ]+"
+        input = body.decode('utf-8')
+        concordance = []
+        
+        #parse only alpha characters using the initialized regular expression
+        input_split = re.sub(regex, '', input.lower())
+        input_split = input_split.split()
+        
+        used_words = []
+        for word in input_split:
+            if (used_words.count(word) == 0):
+                locations = [i for i in range(len(input_split)) if input_split[i] == word]
+                concordance.append(LocationResultConcordance(word, locations))
+                used_words.append(word)
+        
+        concordance.sort(key=operator.attrgetter('token'))
     
-    input = body.decode('utf-8')
-    concordance = []
+    except Exception as error:
+        concordance = []
+        code = 400
     
-    #parse only alpha characters using the initialized regular expression
-    input_split = re.sub(regex, '', input.lower())
-    input_split = input_split.split()
-    
-    used_words = []
-    for word in input_split:
-        if (used_words.count(word) == 0):
-            locations = [i for i in range(len(input_split)) if input_split[i] == word]
-            concordance.append(LocationResultConcordance(word, locations))
-            used_words.append(word)
-    
-    concordance.sort(key=operator.attrgetter('token'))
-    
-    return ResultConcordance(concordance, input)
+    return ResultConcordance(concordance, input), code
