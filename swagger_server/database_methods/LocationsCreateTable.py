@@ -2,10 +2,10 @@ import boto3
 
 def create_location_table(dynamodb=None):
     if not dynamodb:
-        dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8080")
+        dynamodb = boto3.resource('dynamodb')
 
     table = dynamodb.create_table(
-        TableName='Locations'
+        TableName='Locations',
         KeySchema=[
             {
                 'AttributeName': 'input',
@@ -14,13 +14,9 @@ def create_location_table(dynamodb=None):
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'token'
+                'AttributeName': 'input',
                 'AttributeType': 'S'
-            },
-            {
-                'AttributeName': 'location'
-                'AttributeType': 'N'
-            },
+            }
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
@@ -31,4 +27,5 @@ def create_location_table(dynamodb=None):
 
 if __name__ == '__main__':
     location_table = create_location_table()
+    location_table.meta.client.get_waiter('table_exists').wait(TableName='Locations')
     print("Table status:", location_table.table_status)
