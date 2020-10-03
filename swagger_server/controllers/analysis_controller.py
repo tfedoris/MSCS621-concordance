@@ -2,11 +2,16 @@ import connexion
 import six
 import re
 import operator
+import boto3
+import json
 
 from swagger_server.models.result import Result
 from swagger_server.models.result_concordance import ResultConcordance
 from swagger_server.models.location_result import LocationResult
 from swagger_server.models.location_result_concordance import LocationResultConcordance
+
+from swagger_server.database_methods import ConcordanceTableOperations
+from swagger_server.database_methods import LocationsTableOperations
 
 from swagger_server import util
 from collections import Counter
@@ -24,6 +29,8 @@ def get_concordance(body=None):  # noqa: E501
     """
     code = 200
     
+    ConcordanceTableOperations.create_concordance_table()
+
     try:
         if connexion.request.is_json:
             body = str.from_dict(connexion.request.get_json())  # noqa: E501
@@ -51,8 +58,11 @@ def get_concordance(body=None):  # noqa: E501
         concordance = []
         code = 400
         
-    
-    return Result(concordance, input), code
+    result = Result(concordance, input)
+
+    ConcordanceTableOperations.upload_concordance_data(result)
+
+    return result, code
 
 
 def get_concordance_with_location(body=None):  # noqa: E501
@@ -66,6 +76,8 @@ def get_concordance_with_location(body=None):  # noqa: E501
     :rtype: LocationResult
     """
     code = 200
+
+    LocationsTableOperations.create_location_table()
     
     try:
         if connexion.request.is_json:
@@ -94,5 +106,9 @@ def get_concordance_with_location(body=None):  # noqa: E501
     except Exception as error:
         concordance = []
         code = 400
+
+    result = LocationResult(concordance, input)
+
+    LocationsTableOperations.upload_location_data(result)
     
-    return ResultConcordance(concordance, input), code
+    return result, code
