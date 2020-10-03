@@ -3,7 +3,9 @@ import six
 import re
 import operator
 import boto3
+from boto3.dynamodb.conditions import Key
 import json
+import decimal
 
 from swagger_server.models.result import Result
 from swagger_server.models.result_concordance import ResultConcordance
@@ -41,23 +43,35 @@ def get_concordance(body=None):  # noqa: E501
         
         input = body.decode('utf-8')
         concordance = []
-        
-        #parse only alpha characters using the initialized regular expression
-        input_split = re.sub(regex, '', input.lower())
-        input_split = input_split.split()
-        
-        used_words = []
-        for word in input_split:
-            if (used_words.count(word) == 0):
-                concordance.append(ResultConcordance(word, input_split.count(word)))
-                used_words.append(word)
+
+        dynamodb_resource = boto3.resource('dynamodb')
+        table = dynamodb_resource.Table('concordance')
+        response = table.get_item(
+            Key={
+                'input': input
+            }
+        )
+
+        if 'Input' in response:
+            concordance = response['input']['concordance']
+
+        else:  
+            #parse only alpha characters using the initialized regular expression
+            input_split = re.sub(regex, '', input.lower())
+            input_split = input_split.split()
+            
+            used_words = []
+            for word in input_split:
+                if (used_words.count(word) == 0):
+                    concordance.append(ResultConcordance(word, input_split.count(word)))
+                    used_words.append(word)
         
         concordance.sort(key=operator.attrgetter('token'))
         
     except Exception as error:
         concordance = []
         code = 400
-        
+
     result = Result(concordance, input)
 
     ConcordanceTableOperations.upload_concordance_data(result)
@@ -89,17 +103,29 @@ def get_concordance_with_location(body=None):  # noqa: E501
         
         input = body.decode('utf-8')
         concordance = []
+
+        dynamodb_resource = boto3.resource('dynamodb')
+        table = dynamodb_resource.Table('locations')
+        response = table.get_item(
+            Key={
+                'input': input
+            }
+        )
+
+        if 'Input' in response:
+            concordance = response['input']['concordance']
         
-        #parse only alpha characters using the initialized regular expression
-        input_split = re.sub(regex, '', input.lower())
-        input_split = input_split.split()
-        
-        used_words = []
-        for word in input_split:
-            if (used_words.count(word) == 0):
-                locations = [i for i in range(len(input_split)) if input_split[i] == word]
-                concordance.append(LocationResultConcordance(word, locations))
-                used_words.append(word)
+        else:
+            #parse only alpha characters using the initialized regular expression
+            input_split = re.sub(regex, '', input.lower())
+            input_split = input_split.split()
+            
+            used_words = []
+            for word in input_split:
+                if (used_words.count(word) == 0):
+                    locations = [i for i in range(len(input_split)) if input_split[i] == word]
+                    concordance.append(LocationResultConcordance(word, locations))
+                    used_words.append(word)
         
         concordance.sort(key=operator.attrgetter('token'))
     
