@@ -50,6 +50,7 @@ tox
 * Generate concordance containing a breakdown of the words in a given input and the location in which they each appeared in the original input
     * Case-Insensitive and ignores all punctuation except for hyphens (-) and apostrophies (')
 * Can be run remotely via connection to AWS EC2 instance.
+* Can store the results of the text analysis in a DynamoDB on the AWS EC2 instance so the calculation only needs to be performed once
 
 ## Status
 Project is: _in progress_
