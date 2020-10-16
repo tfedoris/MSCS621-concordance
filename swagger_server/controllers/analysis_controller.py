@@ -1,22 +1,21 @@
+import decimal
+import json
+import operator
+import re
+from collections import Counter
+
+import boto3
 import connexion
 import six
-import re
-import operator
-import boto3
 from boto3.dynamodb.conditions import Key
-import json
-import decimal
-
+from swagger_server import util
+from swagger_server.database_methods import (ConcordanceTableOperations,
+                                             LocationsTableOperations)
+from swagger_server.models.location_result import LocationResult
+from swagger_server.models.location_result_concordance import \
+    LocationResultConcordance
 from swagger_server.models.result import Result
 from swagger_server.models.result_concordance import ResultConcordance
-from swagger_server.models.location_result import LocationResult
-from swagger_server.models.location_result_concordance import LocationResultConcordance
-
-from swagger_server.database_methods import ConcordanceTableOperations
-from swagger_server.database_methods import LocationsTableOperations
-
-from swagger_server import util
-from collections import Counter
 
 
 def get_concordance(body=None):  # noqa: E501
