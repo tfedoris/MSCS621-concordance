@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
 
 import connexion
+from swagger_server import app
 
-from swagger_server import encoder
-
-def main():
-    app = connexion.App(__name__, specification_dir='./swagger/')
-    app.app.json_encoder = encoder.JSONEncoder
-    app.add_api('swagger.yaml', arguments={'title': 'MSCS621 Concordance'}, pythonic_params=True)
-    app.run(server='tornado', port=8080)
-
-
+application = app.app # expose global WSGI application object
 if __name__ == '__main__':
-    main()
+    app.run(server='tornado', port=8080)
