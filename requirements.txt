@@ -1,6 +1,8 @@
+botocore
 boto3
-connexion == 2.6.0
-Connexion[swagger-ui]
+connexion[swagger-ui] == 2.6.0
 python_dateutil == 2.6.0
 setuptools >= 21.0.0
+tornado
+uwsgi
 Werkzeug==0.16.1
