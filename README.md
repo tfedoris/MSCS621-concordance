@@ -19,11 +19,17 @@ This project will be developed over time as more assignments are completed for t
 Python 3.5.2+
 
 ## Setup and Usage
-To run the server, please execute the following from the root directory:
+To run the server via Tornado HTTP, please execute the following from the root directory:
 
 ```
 pip3 install -r requirements.txt
 python3 -m swagger_server
+```
+
+Or to run the server using Flask with uWSGI, please execute the following instead:
+```
+pip3 install -r requirements.txt
+uwsgi --ini uwsgi.ini
 ```
 
 and open your browser to here:
@@ -51,6 +57,8 @@ tox
     * Case-Insensitive and ignores all punctuation except for hyphens (-) and apostrophies (')
 * Can be run remotely via connection to AWS EC2 instance.
 * Can store the results of the text analysis in a DynamoDB on the AWS EC2 instance so the calculation only needs to be performed once
+* Can run asynchronously, utilizing either Tornado as the HTTP server or by using Flask with uWSGI
+* Can be deployed via AWS Elastic Beanstalk
 
 ## Status
 Project is: _in progress_
