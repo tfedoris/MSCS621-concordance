@@ -29,8 +29,13 @@ def get_concordance(body=None):  # noqa: E501
     :rtype: Result
     """
     code = 200
-    
-    ConcordanceTableOperations.create_concordance_table()
+
+    connected_to_database = False
+
+    try:
+        ConcordanceTableOperations.create_concordance_table()
+    except:
+        connected_to_database = False
 
     try:
         if connexion.request.is_json:
@@ -43,16 +48,17 @@ def get_concordance(body=None):  # noqa: E501
         input = body.decode('utf-8')
         concordance = []
 
-        dynamodb_resource = boto3.resource('dynamodb')
-        table = dynamodb_resource.Table('concordance')
-        response = table.get_item(
-            Key={
-                'input': input
-            }
-        )
+        if connected_to_database:
+            dynamodb_resource = boto3.resource('dynamodb', region_name='us-east-2')
+            table = dynamodb_resource.Table('concordance')
+            response = table.get_item(
+                Key={
+                    'input': input
+                }
+            )
 
-        if 'Input' in response:
-            concordance = response['input']['concordance']
+            if 'Input' in response:
+                concordance = response['input']['concordance']
 
         else:  
             #parse only alpha characters using the initialized regular expression
@@ -73,7 +79,8 @@ def get_concordance(body=None):  # noqa: E501
 
     result = Result(concordance, input)
 
-    ConcordanceTableOperations.upload_concordance_data(result)
+    if connected_to_database:
+        ConcordanceTableOperations.upload_concordance_data(result)
 
     return result, code
 
@@ -90,7 +97,12 @@ def get_concordance_with_location(body=None):  # noqa: E501
     """
     code = 200
 
-    LocationsTableOperations.create_location_table()
+    connected_to_database = True
+
+    try:
+        LocationsTableOperations.create_location_table()
+    except:
+        connected_to_database = False
     
     try:
         if connexion.request.is_json:
@@ -103,16 +115,17 @@ def get_concordance_with_location(body=None):  # noqa: E501
         input = body.decode('utf-8')
         concordance = []
 
-        dynamodb_resource = boto3.resource('dynamodb')
-        table = dynamodb_resource.Table('locations')
-        response = table.get_item(
-            Key={
-                'input': input
-            }
-        )
+        if connected_to_database:
+            dynamodb_resource = boto3.resource('dynamodb', region_name='us-east-2')            
+            table = dynamodb_resource.Table('locations')
+            response = table.get_item(
+                Key={
+                    'input': input
+                }
+            )
 
-        if 'Input' in response:
-            concordance = response['input']['concordance']
+            if 'Input' in response:
+                concordance = response['input']['concordance']
         
         else:
             #parse only alpha characters using the initialized regular expression
@@ -134,6 +147,8 @@ def get_concordance_with_location(body=None):  # noqa: E501
 
     result = LocationResult(concordance, input)
 
-    LocationsTableOperations.upload_location_data(result)
+
+    if connected_to_database:
+        LocationsTableOperations.upload_location_data(result)
     
     return result, code
