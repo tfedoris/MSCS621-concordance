@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.8
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -11,6 +11,6 @@ COPY . /usr/src/app
 
 EXPOSE 8080
 
-ENTRYPOINT ["python3"]
+ENTRYPOINT ["uwsgi"]
 
-CMD ["-m", "swagger_server"]
+CMD ["--ini", "uwsgi.ini"]

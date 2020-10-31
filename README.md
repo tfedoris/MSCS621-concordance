@@ -50,6 +50,17 @@ sudo pip install tox
 tox
 ```
 
+## Running with Docker
+
+To run the server on a Docker container, please execute the following from the root directory:
+
+```bash
+# building the image
+docker build -t swagger_server .
+# starting up a container
+docker run -p 8080:8080 swagger_server
+```
+
 ## Features
 * Generate concordance containing a breakdown of the words in a given input and their frequency
     * Case-Insensitive and ignores all punctuation except for hyphens (-) and apostrophies (')
@@ -59,6 +70,7 @@ tox
 * Can store the results of the text analysis in a DynamoDB on the AWS EC2 instance so the calculation only needs to be performed once
 * Can run asynchronously, utilizing either Tornado as the HTTP server or by using Flask with uWSGI
 * Can be deployed via AWS Elastic Beanstalk
+* Can be deployed on a Docker container
 
 ## Status
 Project is: _in progress_
