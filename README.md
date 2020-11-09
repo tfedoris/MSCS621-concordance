@@ -19,7 +19,7 @@ This project will be developed over time as more assignments are completed for t
 Python 3.5.2+
 
 ## Setup and Usage
-To run the server via Tornado HTTP, please execute the following from the root directory:
+To run the server via Tornado HTTP, please execute the following from the backend directory:
 
 ```
 pip3 install -r requirements.txt
@@ -50,15 +50,23 @@ sudo pip install tox
 tox
 ```
 
-## Running with Docker
+## Accessing the REST API via the Web UI
 
-To run the server on a Docker container, please execute the following from the root directory:
+![Web UI](./img/Concordance_Web_UI.png)
+
+To run the server using the web UI via docker container, please execute the following from the root directory:
 
 ```bash
 # building the image
-docker build -t swagger_server .
+docker-compose build
 # starting up a container
-docker run -p 8080:8080 swagger_server
+docker-compose up
+```
+
+and open your browser to here:
+
+```
+http://localhost
 ```
 
 ## Features
@@ -70,7 +78,7 @@ docker run -p 8080:8080 swagger_server
 * Can store the results of the text analysis in a DynamoDB on the AWS EC2 instance so the calculation only needs to be performed once
 * Can run asynchronously, utilizing either Tornado as the HTTP server or by using Flask with uWSGI
 * Can be deployed via AWS Elastic Beanstalk
-* Can be deployed on a Docker container
+* Can be accessed via web user interfaced using a docker container.
 
 ## Status
 Project is: _in progress_
