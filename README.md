@@ -19,11 +19,17 @@ This project will be developed over time as more assignments are completed for t
 Python 3.5.2+
 
 ## Setup and Usage
-To run the server, please execute the following from the root directory:
+To run the server via Tornado HTTP, please execute the following from the backend directory:
 
 ```
 pip3 install -r requirements.txt
 python3 -m swagger_server
+```
+
+Or to run the server using Flask with uWSGI, please execute the following instead:
+```
+pip3 install -r requirements.txt
+uwsgi --ini uwsgi.ini
 ```
 
 and open your browser to here:
@@ -44,6 +50,25 @@ sudo pip install tox
 tox
 ```
 
+## Accessing the REST API via the Web UI
+
+![Web UI](./img/Concordance_Web_UI.png)
+
+To run the server using the web UI via docker container, please execute the following from the root directory:
+
+```bash
+# building the image
+docker-compose build
+# starting up a container
+docker-compose up
+```
+
+and open your browser to here:
+
+```
+http://localhost
+```
+
 ## Features
 * Generate concordance containing a breakdown of the words in a given input and their frequency
     * Case-Insensitive and ignores all punctuation except for hyphens (-) and apostrophies (')
@@ -51,6 +76,9 @@ tox
     * Case-Insensitive and ignores all punctuation except for hyphens (-) and apostrophies (')
 * Can be run remotely via connection to AWS EC2 instance.
 * Can store the results of the text analysis in a DynamoDB on the AWS EC2 instance so the calculation only needs to be performed once
+* Can run asynchronously, utilizing either Tornado as the HTTP server or by using Flask with uWSGI
+* Can be deployed via AWS Elastic Beanstalk
+* Can be accessed via web user interfaced using a docker container.
 
 ## Status
 Project is: _in progress_

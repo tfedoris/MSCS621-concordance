@@ -4,7 +4,7 @@ import json
 from swagger_server.models.location_result import LocationResult
 from swagger_server.models.location_result_concordance import LocationResultConcordance
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.client('dynamodb', region_name='us-east-2')
 
 def create_location_table():
     table_name = 'locations'
@@ -48,7 +48,7 @@ def upload_location_data(result):
             }
         })
 
-    resource = boto3.resource("dynamodb")
+    resource = boto3.resource('dynamodb', region_name='us-east-2')
     get_response = resource.Table('locations').get_item(Key={'input': result.input})
 
     if 'Item' not in get_response:        

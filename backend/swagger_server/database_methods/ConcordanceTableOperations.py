@@ -4,7 +4,7 @@ import json
 from swagger_server.models.result import Result
 from swagger_server.models.result_concordance import ResultConcordance
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.client('dynamodb', region_name='us-east-2')
 
 def create_concordance_table():
     table_name = 'concordance'
@@ -43,7 +43,7 @@ def upload_concordance_data(result):
             }
         })
 
-    resource = boto3.resource("dynamodb")
+    resource = boto3.resource('dynamodb', region_name='us-east-2')
     get_response = resource.Table('concordance').get_item(Key={'input': result.input})
 
     if 'Item' not in get_response:

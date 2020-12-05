@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MSCS621 - Concordance</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $( "#button" )
+            .click(function() {
+                var txt = $( "#text_input" ).val();
+                $.ajax({
+                    type: "POST",
+                    contentType: 'text/plain',
+                    url: "/mscs621/tfedoris/concordance/2.0.0/analyze",
+                    data: txt,
+                    datatype: 'json',
+                    success: function(response){
+                        $("#result").html(JSON.stringify(response, undefined, 2));
+                    },
+                    error: function(response){
+                        alert(response.status + ' ' + response.statusText);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form>
+    <textarea id="text_input" rows="10" cols="30">The cat was playing in the garden.</textarea>
+    <br><br>
+    <input type="button" id="button" value="Analyze">
+    </form>
+    <br><br>
+    <pre id="result">Result goes here</pre>
+</body>
+</html>
