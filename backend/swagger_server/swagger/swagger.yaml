@@ -64,6 +64,30 @@ paths:
         "400":
           description: invalid input, object invalid
       x-openapi-router-controller: swagger_server.controllers.analysis_controller
+  /nltk:
+    post:
+      tags:
+      - analysis
+      summary: Calculate
+      description: Post text to generate concordance
+      operationId: get_concordance_nltk
+      requestBody:
+        description: Text to be analyzed
+        content:
+          text/plain:
+            schema:
+              type: string
+            example: The brown fox jumped over the brown log.
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result'
+        "400":
+          description: invalid input, object invalid
+      x-openapi-router-controller: swagger_server.controllers.analysis_controller      
 components:
   schemas:
     result:

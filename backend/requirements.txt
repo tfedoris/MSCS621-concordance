@@ -6,3 +6,4 @@ setuptools >= 21.0.0
 tornado
 Werkzeug==0.16.1
 uwsgi
+nltk
